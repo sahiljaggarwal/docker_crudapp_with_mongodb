@@ -1,23 +1,4 @@
-# Node modules (will be installed during the Docker build)
-node_modules/
-
-# Environment files (don't need to copy .env file into the container)
-.env
-
-# Git files (don't need Git data in the image)
-.git/
-
-# Dockerfile and Docker Compose override (if you don't want to include these in the image)
-docker-compose.override.yml
-
-# Logs and temporary files
-logs/
-*.log
-
-# IDE and editor files
-.vscode/
-.idea/
-
-# Build artifacts
-dist/
-build/
+node_modules
+.git
+Dockerfile
+docker-compose.yml
