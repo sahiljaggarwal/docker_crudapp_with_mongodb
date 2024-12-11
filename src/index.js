@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const Tweet = require("./models/Tweet");
@@ -17,6 +18,19 @@ app.route("/api/users/").get(async (req, res) => {
       return res.status(404).json({ msg: "Tweets not found" });
     }
     return res.status(200).json({ data: tweets });
+  } catch (error) {
+    console.log("Error: ", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+app.route("/api/user/").post(async (req, res) => {
+  try {
+    const { title, tweetBy } = req.body;
+    if (!title || !tweetBy) {
+      return res.status(404).json({ msg: "title and tweetby are required" });
+    }
+    const tweet = await new Tweet({ title, tweetBy }).save();
+    return res.status(200).json({ data: tweet });
   } catch (error) {
     console.log("Error: ", error);
     return res.status(500).json({ error: "Internal server error" });
@@ -73,14 +87,17 @@ app
     }
   });
 
-mongoose
-  .connect(dbUrl)
-  .then(() => {
-    console.log("db is connected");
-  })
-  .catch((error) => {
-    console.log("error on db connection ", db);
-  });
+async function connectDB() {
+  await mongoose
+    .connect(dbUrl)
+    .then(() => {
+      console.log("updated db is connected");
+    })
+    .catch((error) => {
+      console.log("error on db connection , ", error);
+    });
+}
+connectDB();
 app.listen(port, host, () => {
   console.log(`Server is running on http://${host}:${port}`);
 });
